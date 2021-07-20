@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.matheusassmann.cursomc.domain.Categoria;
 import com.matheusassmann.cursomc.domain.Cidade;
+import com.matheusassmann.cursomc.domain.Cliente;
+import com.matheusassmann.cursomc.domain.Endereco;
 import com.matheusassmann.cursomc.domain.Estado;
 import com.matheusassmann.cursomc.domain.Produto;
+import com.matheusassmann.cursomc.domain.enums.TipoCliente;
 import com.matheusassmann.cursomc.repositories.CategoriaRepository;
 import com.matheusassmann.cursomc.repositories.CidadeRepository;
+import com.matheusassmann.cursomc.repositories.ClienteRepository;
+import com.matheusassmann.cursomc.repositories.EnderecoRepository;
 import com.matheusassmann.cursomc.repositories.EstadoRepository;
 import com.matheusassmann.cursomc.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -68,6 +79,19 @@ public class CursomcApplication implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(uf1, uf2));
 		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
 
+		Cliente cliente1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		
+		cliente1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+		
+		clienteRepository.saveAll(Arrays.asList(cliente1));
+		
+		Endereco endereco1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "38220834", cid3, cliente1);
+		Endereco endereco2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cid1, cliente1);
+		
+		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		
+		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		
 	}
 
 }
